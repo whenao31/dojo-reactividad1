@@ -17,7 +17,9 @@ public class EjercicioCorreos {
 //        filtroDominios(listaCorreos, "hotmail");
 //        filtroDominios(listaCorreos, "outlook");
 
-        mapCheckDominio(listaCorreos);
+//        mapCheckDominio(listaCorreos);
+
+        cambiarAEnviados(listaCorreos);
 
     }
 
@@ -42,10 +44,19 @@ public class EjercicioCorreos {
         List<String> listaDominios = Arrays.asList("gmail", "hotmail", "outlook", "sofka", "aol", "yahoo");
         Flux<String> fluxMapDominio = Flux.fromIterable(listaCorreos)
                 .distinct()
-                .map(email -> listaDominios.contains(getEmailDomain(email.getEmail())) ? email.toString() : email.toString() + " no cumple");
+                .map(email -> listaDominios.contains(getEmailDomain(email.getEmail())) ? email.toString() : email.toString() + " no valido");
 
         fluxMapDominio.subscribe(System.out::println);
+    }
 
+    public static void cambiarAEnviados(List<Correo> listaCorreos){
+        List<String> listaDominios = Arrays.asList("gmail", "hotmail", "outlook", "sofka", "aol", "yahoo");
+        Flux<Correo> fluxEnvio = Flux.fromIterable(listaCorreos)
+                .distinct()
+                .filter(email -> listaDominios.contains(getEmailDomain(email.getEmail())))
+                .map(email -> !email.getEnviado() ? new Correo(email.getId(), email.getEmail(), true) : email);
+
+        fluxEnvio.subscribe(System.out::println);
     }
 
     public static String getEmailDomain(String email){
