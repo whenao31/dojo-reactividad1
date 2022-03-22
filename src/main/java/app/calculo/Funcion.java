@@ -10,4 +10,9 @@ public class Funcion {
        this.variable = "x";
        this.grado = grado;
    }
+
+    @Override
+    public String toString() {
+        return this.a+this.variable+"^"+this.grado;
+    }
 }
